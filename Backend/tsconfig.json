@@ -1,26 +1,27 @@
 {
-    // Visit https://aka.ms/tsconfig to read more about this file
-    "compilerOptions": {
-        // File Layout
-        "rootDir": "src",
-        "outDir": "dist",
-        "module": "nodenext",
-        "moduleResolution": "nodenext",
-        "target": "es2022",
-        "types": ["node"],
+  // Visit https://aka.ms/tsconfig to read more about this file
+  "compilerOptions": {
+    // File Layout
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "target": "es2022",
+    "types": ["node"],
 
-        "sourceMap": true,
-        "declaration": true,
-        "declarationMap": true,
-        "noUncheckedIndexedAccess": true,
-        "exactOptionalPropertyTypes": true,
-        "strict": true,
-        "jsx": "react-jsx",
-        "verbatimModuleSyntax": true,
-        "isolatedModules": true,
-        "moduleDetection": "force",
-        "skipLibCheck": true
-    },
-    "include": ["src"],
-    "exclude": ["node_modules", "dist", "prisma"]
+
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "strict": true,
+    "jsx": "react-jsx",
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true,
+  }
+   , "include": ["src"],
+  "exclude": ["node_modules", "dist", "prisma"]
 }

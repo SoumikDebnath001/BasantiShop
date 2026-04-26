@@ -15,3 +15,9 @@ export const contactSchema = z.object({
   productId: z.string().max(64).optional(),
 })
 
+const stripHtmlMsg = (s: string) => s.replace(/<[^>]*>/g, '').trim()
+
+export const contactResponseSchema = z.object({
+  response: z.string().min(1).max(5000).transform((s) => stripHtmlMsg(s)),
+})
+

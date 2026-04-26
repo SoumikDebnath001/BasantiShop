@@ -20,7 +20,7 @@ export default function Register() {
       const { confirmPassword: _, ...payload } = data
       await registerUser(payload)
       showToast('Account created successfully!', 'success')
-      navigate('/dashboard')
+      navigate('/categories')
     } catch (err) {
       showToast(getApiErrorMessage(err, 'Registration failed. Please try again.'), 'error')
     }
@@ -31,17 +31,17 @@ export default function Register() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="w-12 h-12 bg-charcoal rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <span className="text-white font-display font-bold text-lg">L</span>
+            <span className="text-white font-display font-bold text-lg">B</span>
           </div>
           <h1 className="font-display text-3xl font-bold text-charcoal">Create account</h1>
-          <p className="text-muted mt-2 text-sm">Join the Luxe community today</p>
+          <p className="text-muted mt-2 text-sm">Join Basanti Variety Store</p>
         </div>
 
         <div className="bg-white rounded-2xl border border-border p-8 shadow-sm">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <FormInput
               label="Full Name"
-              placeholder="Jane Cooper"
+              placeholder="Full name"
               required
               error={errors.name?.message}
               {...register('name', { required: 'Name is required', minLength: { value: 2, message: 'Min 2 characters' } })}
@@ -49,7 +49,7 @@ export default function Register() {
             <FormInput
               label="Email"
               type="email"
-              placeholder="jane@example.com"
+              placeholder="email@gmail.com"
               required
               error={errors.email?.message}
               {...register('email', {
@@ -59,7 +59,7 @@ export default function Register() {
             />
             <FormInput
               label="Phone"
-              placeholder="+1 555 0100"
+              placeholder="10 digit Indian"
               error={errors.phone?.message}
               {...register('phone')}
             />

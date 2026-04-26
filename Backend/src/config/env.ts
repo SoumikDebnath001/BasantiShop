@@ -19,3 +19,8 @@ export const env = {
 
 export const isProd = env.NODE_ENV === 'production'
 
+/** Comma-separated allowlist support for CORS origins. */
+export const allowedCorsOrigins = env.CORS_ORIGIN.split(',')
+  .map((o) => o.trim())
+  .filter(Boolean)
+

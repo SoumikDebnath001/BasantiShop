@@ -1,6 +1,7 @@
 import { prisma } from '../config/prisma.js'
 import { Prisma } from '@prisma/client'
 import type { OrderStatus } from '@prisma/client'
+import { generateOrderInvoicePdf } from './invoice.service.js'
 
 function orderDto(o: {
   id: string
@@ -9,6 +10,8 @@ function orderDto(o: {
   totalAmount: Prisma.Decimal
   finalTotalAmount: Prisma.Decimal | null
   status: OrderStatus
+  deliveredAt: Date | null
+  invoiceUrl: string | null
   createdAt: Date
   user: { id: string; name: string; email: string }
   items: {
@@ -30,6 +33,8 @@ function orderDto(o: {
     finalTotalAmount: final,
     displayTotal: final ?? listed,
     status: o.status,
+    deliveredAt: o.deliveredAt?.toISOString() ?? null,
+    invoiceUrl: o.invoiceUrl ?? null,
     createdAt: o.createdAt.toISOString(),
     user: o.user,
     items: o.items.map((i) => ({
@@ -170,6 +175,13 @@ export const orderService = {
     return order
   },
 
+  async findRawForInvoice(orderId: string) {
+    return prisma.order.findUnique({
+      where: { id: orderId },
+      select: { userId: true, status: true, invoiceUrl: true },
+    })
+  },
+
   async deletePending(orderId: string) {
     const order = await this.findOrThrow(orderId)
     if (order.status !== 'PENDING') {
@@ -260,16 +272,45 @@ export const orderService = {
   },
 
   async markDelivered(orderId: string) {
-    const order = await this.findOrThrow(orderId)
+    const order = await prisma.order.findUnique({
+      where: { id: orderId },
+      include: {
+        user: { select: { id: true, name: true, email: true } },
+        items: true,
+      },
+    })
+    if (!order) {
+      const err = new Error('Order not found')
+      ;(err as any).status = 404
+      throw err
+    }
     if (order.status !== 'CONFIRMED') {
       const err = new Error('Only confirmed orders can be marked delivered')
       ;(err as any).status = 400
       throw err
     }
 
+    const listed = Number(order.totalAmount)
+    const final = order.finalTotalAmount != null ? Number(order.finalTotalAmount) : null
+    const displayTotal = final ?? listed
+
+    const invoiceRel = await generateOrderInvoicePdf({
+      id: order.id,
+      createdAt: order.createdAt,
+      user: { name: order.user.name, email: order.user.email },
+      items: order.items,
+      displayTotal,
+    })
+
+    const deliveredAt = new Date()
+
     await prisma.order.update({
       where: { id: orderId },
-      data: { status: 'DELIVERED' },
+      data: {
+        status: 'DELIVERED',
+        deliveredAt,
+        invoiceUrl: invoiceRel,
+      },
     })
 
     const updated = await prisma.order.findUniqueOrThrow({
@@ -280,6 +321,65 @@ export const orderService = {
       },
     })
     return orderDto(updated)
+  },
+
+  async listDeliveredLastYear(userId: string) {
+    const since = new Date()
+    since.setFullYear(since.getFullYear() - 1)
+    const rows = await prisma.order.findMany({
+      where: {
+        userId,
+        status: 'DELIVERED',
+        deliveredAt: { gte: since },
+      },
+      orderBy: { deliveredAt: 'desc' },
+      include: {
+        user: { select: { id: true, name: true, email: true } },
+        items: true,
+      },
+    })
+    return rows.map(orderDto)
+  },
+
+  async listForUser(targetUserId: string, requesterId: string, requesterRole: 'admin' | 'customer') {
+    if (requesterId !== targetUserId && requesterRole !== 'admin') {
+      const err = new Error('Forbidden')
+      ;(err as any).status = 403
+      throw err
+    }
+    return this.listMine(targetUserId)
+  },
+
+  async getMyOverview(userId: string) {
+    const [totalOrders, pending, confirmed, delivered] = await Promise.all([
+      prisma.order.count({ where: { userId } }),
+      prisma.order.count({ where: { userId, status: 'PENDING' } }),
+      prisma.order.count({ where: { userId, status: 'CONFIRMED' } }),
+      prisma.order.count({ where: { userId, status: 'DELIVERED' } }),
+    ])
+
+    const recentOrders = await prisma.order.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+      take: 5,
+      include: {
+        items: true,
+      },
+    })
+
+    return {
+      totalOrders,
+      pendingOrders: pending,
+      confirmedOrders: confirmed,
+      deliveredOrders: delivered,
+      recentActivity: recentOrders.map((o) => ({
+        id: o.id,
+        status: o.status,
+        createdAt: o.createdAt.toISOString(),
+        displayTotal: o.finalTotalAmount != null ? Number(o.finalTotalAmount) : Number(o.totalAmount),
+        itemCount: o.items.length,
+      })),
+    }
   },
 
   async markReturned(orderId: string) {

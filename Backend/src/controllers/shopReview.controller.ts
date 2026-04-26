@@ -14,6 +14,12 @@ export const shopReviewController = {
     res.json(rows)
   },
 
+  async listPublic(_req: Request, res: Response) {
+    const rows = await shopReviewService.listPublic(30)
+    res.set('Cache-Control', 'public, max-age=60')
+    res.json(rows)
+  },
+
   async summary(_req: Request, res: Response) {
     const s = await shopReviewService.publicSummary()
     res.set('Cache-Control', 'public, max-age=60')

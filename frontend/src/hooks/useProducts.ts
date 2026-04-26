@@ -9,7 +9,7 @@ export const useProducts = (initialFilters?: Partial<ProductFilters>) => {
   const [page, setPage] = useState(1)
   const [filters, setFilters] = useState<ProductFilters>({
     search: '',
-    category: 'All',
+    category: '',
     minPrice: '',
     maxPrice: '',
     sortBy: 'newest',
@@ -22,7 +22,7 @@ export const useProducts = (initialFilters?: Partial<ProductFilters>) => {
     try {
       const result = await productService.getProducts({
         search: filters.search || undefined,
-        category: filters.category !== 'All' ? filters.category : undefined,
+        category: filters.category || undefined,
         minPrice: filters.minPrice !== '' ? Number(filters.minPrice) : undefined,
         maxPrice: filters.maxPrice !== '' ? Number(filters.maxPrice) : undefined,
         sortBy: filters.sortBy,

@@ -12,7 +12,7 @@ interface CartContextType {
   totalPrice: number
 }
 
-const cartKeyForUser = (userId: string) => `luxe_cart_${userId}`
+const cartKeyForUser = (userId: string) => `basanti_variety_store_cart_${userId}`
 
 const CartContext = createContext<CartContextType | null>(null)
 

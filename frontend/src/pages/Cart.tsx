@@ -20,10 +20,10 @@ export default function Cart() {
         <h2 className="font-display text-2xl font-semibold text-charcoal mb-3">Your cart is empty</h2>
         <p className="text-muted mb-8">Add some products to get started.</p>
         <Link
-          to="/products"
+          to="/categories"
           className="inline-flex items-center gap-2 bg-charcoal text-white px-6 py-3 rounded-xl font-medium hover:bg-accent transition-colors"
         >
-          Browse Products <ArrowRight size={16} />
+          Browse categories <ArrowRight size={16} />
         </Link>
       </div>
     )
@@ -86,10 +86,10 @@ export default function Cart() {
             </button>
 
             <Link
-              to="/products"
+              to="/categories"
               className="block text-center text-sm text-muted hover:text-charcoal transition-colors"
             >
-              Continue Shopping
+              Continue shopping
             </Link>
           </div>
         </div>

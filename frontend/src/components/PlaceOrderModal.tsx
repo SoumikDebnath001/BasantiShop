@@ -41,7 +41,7 @@ export default function PlaceOrderModal({ isOpen, onClose, items, onSuccess }: P
         phoneNumber: data.phoneNumber.trim(),
         items: items.map((i) => ({ productId: i.product.id, quantity: i.quantity })),
       })
-      showToast('Order placed successfully! We will confirm soon.', 'success')
+      showToast('Thank you for your order! We will contact you shortly.', 'success')
       reset()
       onSuccess()
       onClose()

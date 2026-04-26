@@ -42,4 +42,9 @@ export const shopReviewService = {
     const { data } = await axiosInstance.get<ShopReview[] | { data: ShopReview[] }>(API_ENDPOINTS.SHOP_REVIEWS)
     return normalizeReviews(data)
   },
+
+  async listPublic(): Promise<ShopReview[]> {
+    const { data } = await axiosInstance.get<ShopReview[]>(API_ENDPOINTS.SHOP_REVIEWS_PUBLIC)
+    return normalizeReviews(data)
+  },
 }

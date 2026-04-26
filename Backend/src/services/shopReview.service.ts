@@ -24,6 +24,22 @@ export const shopReviewService = {
     }
   },
 
+  async listPublic(limit = 30) {
+    const rows = await prisma.shopReview.findMany({
+      take: limit,
+      orderBy: { createdAt: 'desc' },
+      include: { user: { select: { id: true, name: true, email: true } } },
+    })
+    return rows.map((r) => ({
+      id: r.id,
+      userId: r.userId,
+      rating: r.rating,
+      message: r.message,
+      createdAt: r.createdAt.toISOString(),
+      user: r.user,
+    }))
+  },
+
   async listAllForAdmin() {
     const rows = await prisma.shopReview.findMany({
       orderBy: { createdAt: 'desc' },

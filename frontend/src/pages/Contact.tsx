@@ -35,9 +35,9 @@ export default function Contact() {
         {/* Info */}
         <div className="space-y-5">
           {[
-            { icon: MapPin, title: 'Address', detail: '123 Market Street, San Francisco, CA 94102' },
-            { icon: Mail, title: 'Email', detail: 'hello@luxe.com' },
-            { icon: Phone, title: 'Phone', detail: '+1 (555) 123-4567' },
+            { icon: MapPin, title: 'Address', detail: 'Bottle company more, Jyotinagar, Siliguri, WB' },
+            { icon: Mail, title: 'Email', detail: 'basantistore7@gmai.com' },
+            { icon: Phone, title: 'Phone', detail: '8967550790' },
           ].map(({ icon: Icon, title, detail }) => (
             <div key={title} className="flex gap-4 bg-white rounded-2xl p-5 border border-border">
               <div className="w-10 h-10 bg-cream rounded-xl flex items-center justify-center shrink-0">
@@ -57,14 +57,14 @@ export default function Contact() {
             <div className="grid grid-cols-2 gap-4">
               <FormInput
                 label="Name"
-                placeholder="Jane Cooper"
+                placeholder="Full name"
                 required
                 error={errors.name?.message}
                 {...register('name', { required: 'Name is required' })}
               />
               <FormInput
                 label="Phone"
-                placeholder="+1 555 0100"
+                placeholder="10 digit Indian"
                 required
                 error={errors.phone?.message}
                 {...register('phone', { required: 'Phone is required' })}
@@ -73,7 +73,7 @@ export default function Contact() {
             <FormInput
               label="Email"
               type="email"
-              placeholder="jane@example.com"
+              placeholder="email@gmail.com"
               required
               error={errors.email?.message}
               {...register('email', {

@@ -12,7 +12,7 @@ export default function Login() {
   const { showToast } = useToast()
   const navigate = useNavigate()
   const location = useLocation()
-  const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/'
+  const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/categories'
 
   const { register, handleSubmit, formState: { errors } } = useForm<LoginPayload>()
 
@@ -31,10 +31,10 @@ export default function Login() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="w-12 h-12 bg-charcoal rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <span className="text-white font-display font-bold text-lg">L</span>
+            <span className="text-white font-display font-bold text-lg">B</span>
           </div>
           <h1 className="font-display text-3xl font-bold text-charcoal">Welcome back</h1>
-          <p className="text-muted mt-2 text-sm">Sign in to your Luxe account</p>
+          <p className="text-muted mt-2 text-sm">Sign in to Basanti Variety Store</p>
         </div>
 
         <div className="bg-white rounded-2xl border border-border p-8 shadow-sm">
@@ -42,7 +42,7 @@ export default function Login() {
             <FormInput
               label="Email"
               type="email"
-              placeholder="jane@example.com"
+              placeholder="name@gmail.com"
               required
               autoComplete="email"
               error={errors.email?.message}

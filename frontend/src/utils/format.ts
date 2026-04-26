@@ -1,8 +1,8 @@
 export const formatPrice = (price: number): string =>
-  new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price)
+  new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(price)
 
 export const formatDate = (date: string): string =>
-  new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).format(
+  new Intl.DateTimeFormat('en-IN', { year: 'numeric', month: 'long', day: 'numeric' }).format(
     new Date(date)
   )
 

@@ -1,35 +1,51 @@
 import { ProductFilters } from '../types'
-import { CATEGORIES } from '../utils/mockData'
 
 interface FilterSidebarProps {
   filters: ProductFilters
   onChange: (filters: Partial<ProductFilters>) => void
+  categories: string[]
+  categoriesLoading?: boolean
+  categoriesError?: string | null
 }
 
-export default function FilterSidebar({ filters, onChange }: FilterSidebarProps) {
+export default function FilterSidebar({
+  filters,
+  onChange,
+  categories,
+  categoriesLoading,
+  categoriesError,
+}: FilterSidebarProps) {
   return (
     <aside className="space-y-6">
-      {/* Categories */}
       <div>
         <h3 className="text-xs font-semibold text-muted uppercase tracking-wider mb-3">Category</h3>
-        <div className="space-y-1">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => onChange({ category: cat })}
-              className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${
-                filters.category === cat
-                  ? 'bg-charcoal text-white font-medium'
-                  : 'text-charcoal hover:bg-gray-100'
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
+        {categoriesError && (
+          <p className="text-xs text-red-600 mb-2">{categoriesError}</p>
+        )}
+        {categoriesLoading ? (
+          <p className="text-sm text-muted">Loading categories…</p>
+        ) : categories.length === 0 ? (
+          <p className="text-sm text-muted">No categories yet. Ask an admin to add categories.</p>
+        ) : (
+          <div className="space-y-1">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => onChange({ category: cat })}
+                className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${
+                  filters.category === cat
+                    ? 'bg-charcoal text-white font-medium'
+                    : 'text-charcoal hover:bg-gray-100'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* Price Range */}
       <div>
         <h3 className="text-xs font-semibold text-muted uppercase tracking-wider mb-3">Price Range</h3>
         <div className="flex gap-2">
@@ -50,7 +66,6 @@ export default function FilterSidebar({ filters, onChange }: FilterSidebarProps)
         </div>
       </div>
 
-      {/* Sort */}
       <div>
         <h3 className="text-xs font-semibold text-muted uppercase tracking-wider mb-3">Sort By</h3>
         <select
@@ -66,10 +81,11 @@ export default function FilterSidebar({ filters, onChange }: FilterSidebarProps)
       </div>
 
       <button
-        onClick={() => onChange({ category: 'All', minPrice: '', maxPrice: '', sortBy: 'newest', search: '' })}
+        type="button"
+        onClick={() => onChange({ category: '', minPrice: '', maxPrice: '', sortBy: 'newest', search: '' })}
         className="w-full text-sm text-muted hover:text-charcoal underline underline-offset-2 transition-colors"
       >
-        Clear all filters
+        Clear filters
       </button>
     </aside>
   )

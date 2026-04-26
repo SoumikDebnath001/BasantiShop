@@ -9,7 +9,9 @@ import {
   ClipboardList,
   TrendingUp,
   MessageSquare,
+  Mail,
   ScrollText,
+  FolderTree,
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 
@@ -17,6 +19,8 @@ const links = [
   { to: '/admin', icon: LayoutDashboard, label: 'Dashboard', end: true },
   { to: '/admin/orders', icon: ClipboardList, label: 'Orders' },
   { to: '/admin/analytics', icon: TrendingUp, label: 'Profit & loss' },
+  { to: '/admin/categories', icon: FolderTree, label: 'Categories' },
+  { to: '/admin/contact-messages', icon: Mail, label: 'Contact messages' },
   { to: '/admin/products', icon: Package, label: 'Manage Products' },
   { to: '/admin/products/new', icon: PlusCircle, label: 'Add Product' },
   { to: '/admin/shop-reviews', icon: MessageSquare, label: 'Shop reviews' },

@@ -3,9 +3,10 @@ import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { ShoppingCart, User, ChevronDown, Menu, X, LayoutDashboard, LogOut, Shield } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { useCart } from '../context/CartContext'
+import NavbarSearch from './NavbarSearch'
+import { SHOP_NAME } from '../constants/brand'
 //@ts-ignore
 import logo from '../assets/logo.png'
-
 
 export default function Navbar() {
   const { isAuthenticated, isAdmin, user, logout } = useAuth()
@@ -34,59 +35,69 @@ export default function Navbar() {
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
     `text-sm font-medium transition-colors ${isActive ? 'text-charcoal' : 'text-muted hover:text-charcoal'}`
 
+  type NavItem = { to: string; label: string; end?: boolean }
+
+  const guestNav: NavItem[] = [
+    { to: '/', label: 'Home', end: true },
+    { to: '/#about', label: 'About us' },
+    { to: '/#reviews', label: 'Reviews' },
+    { to: '/#how-it-works', label: 'How it works' },
+    { to: '/contact', label: 'Contact' },
+  ]
+
+  const customerNav: NavItem[] = [
+    { to: '/', label: 'Home', end: true },
+    { to: '/categories', label: 'Shop' },
+    { to: '/contact', label: 'Contact' },
+  ]
+
   return (
-    <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-border">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-        <Link to="/" className="flex items-center gap-2">
-  <div className="w-20 h-20 flex items-center justify-center">
-    <img 
-      src={logo} 
-      alt="logo" 
-      className="w-full h-full object-contain"
-    />
-  </div>
-  
-  <span className="font-display text-xl font-semibold text-charcoal tracking-tight">
-    Basanti Variety store
-  </span>
-</Link>
+    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-border shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 md:py-0">
+        <div className="flex flex-col gap-2 md:gap-0">
+          <div className="flex items-center justify-between gap-3 h-14 md:h-[4.25rem]">
+            <Link to="/" className="flex items-center gap-2 shrink-0 min-w-0 max-w-[55%] sm:max-w-none">
+              <div className="w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center shrink-0">
+                <img src={logo} alt="" className="w-full h-full object-contain" />
+              </div>
+              <span className="font-display text-lg sm:text-xl font-semibold text-charcoal tracking-tight truncate">
+                {SHOP_NAME}
+              </span>
+            </Link>
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-7">
-            <NavLink to="/" end className={navLinkClass}>Home</NavLink>
-            <NavLink to="/products" className={navLinkClass}>Products</NavLink>
-            <NavLink to="/contact" className={navLinkClass}>Contact</NavLink>
-          </nav>
+            <nav className="hidden md:flex items-center gap-6 shrink-0">
+              {(isAuthenticated && !isAdmin ? customerNav : guestNav).map(({ to, label, end }) => (
+                <NavLink key={to} to={to} end={!!end} className={navLinkClass}>
+                  {label}
+                </NavLink>
+              ))}
+            </nav>
 
-          {/* Right Actions */}
-          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             {isAuthenticated && (
               <Link
                 to="/cart"
-                className="relative p-2 rounded-xl hover:bg-gray-100 text-charcoal transition-colors"
+                className="relative p-2 rounded-xl hover:bg-cream text-charcoal transition-colors"
+                aria-label="Cart"
               >
                 <ShoppingCart size={20} />
                 {totalItems > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-accent text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                  <span className="absolute -top-0.5 -right-0.5 min-w-[1.15rem] h-5 px-1 bg-accent text-white text-[10px] font-bold rounded-full flex items-center justify-center">
                     {totalItems > 99 ? '99+' : totalItems}
                   </span>
                 )}
               </Link>
             )}
 
-            {/* Auth */}
             {isAuthenticated ? (
               <div ref={dropdownRef} className="relative hidden md:block">
                 <button
+                  type="button"
                   onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className="flex items-center gap-2 py-1.5 px-3 rounded-xl hover:bg-gray-100 transition-colors"
+                  className="flex items-center gap-2 py-1.5 px-3 rounded-xl hover:bg-cream transition-colors"
                 >
-                  <div className="w-7 h-7 bg-charcoal rounded-lg flex items-center justify-center">
-                    <span className="text-white text-xs font-semibold">
-                      {user?.name?.[0]?.toUpperCase()}
-                    </span>
+                  <div className="w-8 h-8 bg-charcoal rounded-lg flex items-center justify-center">
+                    <span className="text-white text-xs font-semibold">{user?.name?.[0]?.toUpperCase()}</span>
                   </div>
                   <span className="text-sm font-medium text-charcoal max-w-[100px] truncate">{user?.name}</span>
                   <ChevronDown size={14} className={`text-muted transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
@@ -98,16 +109,16 @@ export default function Navbar() {
                       <Link
                         to="/admin"
                         onClick={() => setDropdownOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-charcoal hover:bg-gray-50 transition-colors"
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-charcoal hover:bg-cream transition-colors"
                       >
                         <Shield size={15} className="text-muted" />
-                        Admin Panel
+                        Admin panel
                       </Link>
                     ) : (
                       <Link
                         to="/dashboard"
                         onClick={() => setDropdownOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-charcoal hover:bg-gray-50 transition-colors"
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-charcoal hover:bg-cream transition-colors"
                       >
                         <LayoutDashboard size={15} className="text-muted" />
                         Dashboard
@@ -115,8 +126,9 @@ export default function Navbar() {
                     )}
                     <hr className="my-1 border-border" />
                     <button
+                      type="button"
                       onClick={handleLogout}
-                      className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors"
+                      className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
                     >
                       <LogOut size={15} />
                       Logout
@@ -141,32 +153,36 @@ export default function Navbar() {
               </div>
             )}
 
-            {/* Mobile Toggle */}
             <button
+              type="button"
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="p-2 rounded-xl hover:bg-gray-100 text-charcoal transition-colors md:hidden"
+              className="p-2 rounded-xl hover:bg-cream text-charcoal transition-colors md:hidden"
+              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
             >
               {mobileOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
+          </div>
+
+          {isAuthenticated && !isAdmin && (
+            <div className="w-full max-w-2xl md:mx-auto pb-1 md:pb-3 md:pt-0 border-t border-border/70 md:border-t-0 pt-2 md:mt-0">
+              <NavbarSearch />
+            </div>
+          )}
         </div>
 
-        {/* Mobile Menu */}
         {mobileOpen && (
           <div className="md:hidden border-t border-border py-4 space-y-1 animate-slide-up">
-            {[
-              { to: '/', label: 'Home' },
-              { to: '/products', label: 'Products' },
-              { to: '/contact', label: 'Contact' },
-              ...(isAuthenticated ? [{ to: '/cart', label: 'Cart' }] as const : []),
-            ].map(({ to, label }) => (
+            {(isAuthenticated && !isAdmin ? customerNav : guestNav).map(({ to, label, end }) => (
               <NavLink
                 key={to}
                 to={to}
-                end={to === '/'}
+                end={!!end}
                 onClick={() => setMobileOpen(false)}
                 className={({ isActive }) =>
-                  `block px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${isActive ? 'bg-gray-100 text-charcoal' : 'text-muted hover:text-charcoal hover:bg-gray-50'}`
+                  `block px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                    isActive ? 'bg-cream text-charcoal' : 'text-muted hover:text-charcoal hover:bg-cream/80'
+                  }`
                 }
               >
                 {label}
@@ -178,14 +194,28 @@ export default function Navbar() {
                 <Link
                   to={isAdmin ? '/admin' : '/dashboard'}
                   onClick={() => setMobileOpen(false)}
-                  className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-charcoal hover:bg-gray-50"
+                  className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-charcoal hover:bg-cream"
                 >
                   <User size={15} />
-                  {isAdmin ? 'Admin Panel' : 'Dashboard'}
+                  {isAdmin ? 'Admin panel' : 'Dashboard'}
                 </Link>
+                {isAuthenticated && !isAdmin && (
+                  <Link
+                    to="/cart"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-charcoal hover:bg-cream"
+                  >
+                    <ShoppingCart size={15} />
+                    Cart
+                  </Link>
+                )}
                 <button
-                  onClick={() => { handleLogout(); setMobileOpen(false) }}
-                  className="flex items-center gap-2 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50"
+                  type="button"
+                  onClick={() => {
+                    handleLogout()
+                    setMobileOpen(false)
+                  }}
+                  className="flex items-center gap-2 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-red-600 hover:bg-red-50"
                 >
                   <LogOut size={15} />
                   Logout
@@ -196,7 +226,7 @@ export default function Navbar() {
                 <Link
                   to="/login"
                   onClick={() => setMobileOpen(false)}
-                  className="flex-1 text-center text-sm font-medium border border-border py-2.5 rounded-xl text-charcoal hover:bg-gray-50"
+                  className="flex-1 text-center text-sm font-medium border border-border py-2.5 rounded-xl text-charcoal hover:bg-cream"
                 >
                   Login
                 </Link>

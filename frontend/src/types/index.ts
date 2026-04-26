@@ -77,6 +77,8 @@ export interface ContactHistoryItem {
   id: string
   productName: string
   productId: string | null
+  message: string
+  response: string | null
   createdAt: string
   preview: string
 }
@@ -102,9 +104,25 @@ export interface Order {
   finalTotalAmount: number | null
   displayTotal: number
   status: OrderStatus
+  deliveredAt: string | null
+  invoiceUrl: string | null
   createdAt: string
   user: { id: string; name: string; email: string }
   items: OrderLineItem[]
+}
+
+export interface DashboardOverview {
+  totalOrders: number
+  pendingOrders: number
+  confirmedOrders: number
+  deliveredOrders: number
+  recentActivity: {
+    id: string
+    status: OrderStatus
+    createdAt: string
+    displayTotal: number
+    itemCount: number
+  }[]
 }
 
 export interface CreateOrderPayload {
@@ -186,10 +204,22 @@ export interface PaginatedResponse<T> {
 // ─── Filters ─────────────────────────────────────────────────
 export interface ProductFilters {
   search: string
+  /** Empty string = no category selected (do not load products). */
   category: string
   minPrice: number | ''
   maxPrice: number | ''
   sortBy: 'price-asc' | 'price-desc' | 'newest' | 'name'
+}
+
+export interface CategoryDTO {
+  id: string
+  name: string
+  createdAt: string
+}
+
+export interface SearchSuggestions {
+  categories: { id: string; name: string }[]
+  products: { id: string; slug: string; name: string; category: string; image: string | null }[]
 }
 
 // ─── Toast ────────────────────────────────────────────────────

@@ -1,7 +1,9 @@
+import fs from 'node:fs'
 import type { Request, Response } from 'express'
 import { createOrderSchema, patchOrderSchema } from '../validators/order.schemas.js'
 import { orderService } from '../services/order.service.js'
 import { adminLogService, ADMIN_ACTIONS } from '../services/adminLog.service.js'
+import { resolveInvoiceAbsolutePath } from '../services/invoice.service.js'
 
 export const orderController = {
   async create(req: Request, res: Response) {
@@ -14,7 +16,67 @@ export const orderController = {
   async my(req: Request, res: Response) {
     const userId = req.user!.id
     const orders = await orderService.listMine(userId)
+    res.set('Cache-Control', 'private, no-store')
     res.json(orders)
+  },
+
+  async myOverview(req: Request, res: Response) {
+    const userId = req.user!.id
+    const overview = await orderService.getMyOverview(userId)
+    res.set('Cache-Control', 'private, no-store')
+    res.json(overview)
+  },
+
+  async historyDeliveredLastYear(req: Request, res: Response) {
+    const userId = req.user!.id
+    const orders = await orderService.listDeliveredLastYear(userId)
+    res.set('Cache-Control', 'private, no-store')
+    res.json(orders)
+  },
+
+  async listForUser(req: Request, res: Response) {
+    const targetUserId = String(req.params.userId)
+    const orders = await orderService.listForUser(targetUserId, req.user!.id, req.user!.role)
+    res.set('Cache-Control', 'private, no-store')
+    res.json(orders)
+  },
+
+  async downloadInvoice(req: Request, res: Response) {
+    const orderId = String(req.params.id)
+    const userId = req.user!.id
+
+    const order = await orderService.findRawForInvoice(orderId)
+    if (!order) {
+      res.status(404).json({ error: 'Order not found' })
+      return
+    }
+    if (order.userId !== userId) {
+      res.status(403).json({ error: 'Forbidden' })
+      return
+    }
+    if (order.status !== 'DELIVERED' || !order.invoiceUrl) {
+      res.status(404).json({ error: 'Invoice not available' })
+      return
+    }
+
+    let abs: string
+    try {
+      abs = resolveInvoiceAbsolutePath(order.invoiceUrl)
+    } catch {
+      res.status(400).json({ error: 'Invalid invoice' })
+      return
+    }
+
+    if (!fs.existsSync(abs)) {
+      res.status(404).json({ error: 'Invoice file missing' })
+      return
+    }
+
+    res.setHeader('Content-Type', 'application/pdf')
+    res.setHeader('X-Content-Type-Options', 'nosniff')
+    res.setHeader('Cache-Control', 'private, no-store')
+    res.setHeader('Content-Disposition', `attachment; filename="invoice-${orderId}.pdf"`)
+    fs.createReadStream(abs).pipe(res)
   },
 
   async listAll(_req: Request, res: Response) {

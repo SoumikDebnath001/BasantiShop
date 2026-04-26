@@ -1,5 +1,6 @@
 import { prisma } from '../config/prisma.js'
 import type { UserRole } from '@prisma/client'
+import { contactService } from './contact.service.js'
 
 function roleToFrontend(role: UserRole): 'admin' | 'customer' {
   return role === 'ADMIN' ? 'admin' : 'customer'
@@ -29,26 +30,7 @@ export const userService = {
   },
 
   async listContacts(userId: string) {
-    const rows = await prisma.contactMessage.findMany({
-      where: { userId },
-      orderBy: { createdAt: 'desc' },
-      take: 50,
-      select: {
-        id: true,
-        productName: true,
-        productId: true,
-        createdAt: true,
-        message: true,
-      },
-    })
-    return {
-      data: rows.map((r) => ({
-        id: r.id,
-        productName: r.productName ?? 'General enquiry',
-        productId: r.productId,
-        createdAt: r.createdAt.toISOString(),
-        preview: r.message.length > 120 ? `${r.message.slice(0, 120)}…` : r.message,
-      })),
-    }
+    const data = await contactService.listHistoryForUser(userId)
+    return { data }
   },
 }

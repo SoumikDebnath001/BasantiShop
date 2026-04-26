@@ -84,8 +84,8 @@ export default function ProductDetails() {
         <Seo title="Product not found" description="The product you are looking for is not available." />
         <h2 className="font-display text-2xl font-semibold text-charcoal mb-3">Product not found</h2>
         <p className="text-muted mb-6">{error || "This product doesn't exist."}</p>
-        <Link to="/products" className="inline-flex items-center gap-2 bg-charcoal text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-accent transition-colors">
-          <ArrowLeft size={15} /> Browse Products
+        <Link to="/categories" className="inline-flex items-center gap-2 bg-charcoal text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-accent transition-colors">
+          <ArrowLeft size={15} /> Browse categories
         </Link>
       </div>
     )
@@ -102,12 +102,19 @@ export default function ProductDetails() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 animate-fade-in">
       <Seo title={product.name} description={desc} />
 
-      <nav className="flex items-center gap-2 text-sm text-muted mb-8" aria-label="Breadcrumb">
+      <nav className="flex items-center gap-2 text-sm text-muted mb-8 flex-wrap" aria-label="Breadcrumb">
         <Link to="/" className="hover:text-charcoal transition-colors">Home</Link>
         <span>/</span>
-        <Link to="/products" className="hover:text-charcoal transition-colors">Products</Link>
+        <Link to="/categories" className="hover:text-charcoal transition-colors">Categories</Link>
         <span>/</span>
-        <span className="text-charcoal">{product.name}</span>
+        <Link
+          to={`/products?category=${encodeURIComponent(product.category)}`}
+          className="hover:text-charcoal transition-colors max-w-[10rem] truncate"
+        >
+          {product.category}
+        </Link>
+        <span>/</span>
+        <span className="text-charcoal truncate max-w-[12rem]">{product.name}</span>
       </nav>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
