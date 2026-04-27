@@ -38,6 +38,11 @@ jobs:
                   build-args: |
                       VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}
 
+            # ✅ Debug step (added)
+            - name: Check key length
+              run: |
+                  echo "${{ secrets.SSH_PRIVATE_KEY }}" | wc -l
+
             - name: Deploy to production
               uses: appleboy/ssh-action@v1.0.3
               with:
