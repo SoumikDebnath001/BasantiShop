@@ -1,225 +1,120 @@
-# BasantiShop
+# Luxe — Modern E-Commerce Platform
 
-Welcome to BasantiShop! This is a comprehensive e-commerce platform designed to provide a seamless shopping experience.
+![Logo](frontend/logo.png)
 
-## 📋 Table of Contents
+Luxe is a premium, full-stack e-commerce solution designed to provide a seamless shopping experience for users and a robust management system for administrators. Built with a modern tech stack, it emphasizes performance, security, and a sophisticated aesthetic.
 
-- [About](#about)
-- [Features](#features)
-- [Getting Started](#getting-started)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Project Structure](#project-structure)
-- [Images & Media](#images--media)
-- [Contributing](#contributing)
-- [License](#license)
-- [Support](#support)
+---
 
-## 🏪 About
+## 🌟 Purpose
 
-BasantiShop is a modern e-commerce application that aims to deliver quality products and services to customers worldwide. Our platform is built with user-friendliness and scalability in mind.
+The purpose of **BasantiShop (Luxe)** is to demonstrate a production-ready e-commerce ecosystem. It bridges the gap between a high-end customer storefront and a data-driven administrative backend, showcasing how modern web technologies can handle complex business logic, real-time analytics, and secure transactions.
 
-## ✨ Features
+---
 
-- 🛍️ Wide range of products
-- 🔐 Secure user authentication
-- 💳 Multiple payment options
-- 📦 Real-time order tracking
-- 👤 User profile management
-- ⭐ Product reviews and ratings
-- 🔍 Advanced search and filtering
-- 📱 Responsive design
-- 🌙 Dark mode support
+## ✨ Unique Features
+
+-   **Order Lifecycle & Negotiation**: Admins can negotiate final totals with customers, moving orders through statuses from `PENDING` to `DELIVERED`, with automatic stock management.
+-   **Profit & Loss Analytics**: Real-time financial tracking that calculates profit based on cost per unit and negotiated sale prices.
+-   **Activity Logging**: A dedicated audit trail for administrators, tracking system changes like product CRUD, order updates, and admin logins.
+-   **Cloud-Powered Media**: Seamless image management for products using **Cloudinary** integration.
+-   **Sophisticated Customer Tools**: Personalized dashboards, order history, and integrated shop/product review systems.
+-   **Secure & Scalable**: Implementation of JWT-based auth, Zod validation, rate limiting, and a clean RESTful architecture.
+
+---
+
+## 🛠️ Technical Skills Demonstrated
+
+This project showcases a wide range of professional software engineering skills:
+
+### Frontend Excellence
+-   **React 18 & TypeScript**: Building scalable, type-safe UI components.
+-   **Vite 5**: Optimized build tooling for a fast development experience.
+-   **Tailwind CSS**: Custom, responsive design systems with a focus on modern aesthetics.
+-   **React Hook Form & Zod**: Robust form handling and client-side validation.
+
+### Backend Prowess
+-   **Node.js & Express 5**: Designing RESTful APIs with advanced middleware patterns.
+-   **Prisma ORM & PostgreSQL**: Complex data modeling, migrations, and efficient relationship management.
+-   **Security Architecture**: Password hashing (BcryptJS), JWT authentication, Helmet headers, and CORS protection.
+-   **Advanced Logic**: Complex order lifecycle management, stock reconciliation, and financial analytics.
+
+---
+
+## 📸 Visual Showcase
+
+### 🎥 Customer Experience Walkthrough
+> *A quick look at the storefront, product catalog, and checkout flow.*
+
+![Customer Demo Video](./Screencast%20from%202026-05-04%2018-40-23.webm)
+
+---
+
+### 🎥 Admin Dashboard & Management
+> *Deep dive into the administrative tools, analytics, and order management.*
+
+![Admin Demo Video](./Screencast%20from%202026-05-04%2018-48-34.webm)
+
+---
+
+### Customer Storefront
+> *A clean and inviting interface designed to convert visitors into customers.*
+
+![Home Page Screenshot](https://via.placeholder.com/800x450?text=Home+Page+Screenshot)
+*Home page featuring curated collections and featured products.*
+
+![Product Catalog](https://via.placeholder.com/800x450?text=Shop+Page+Screenshot)
+*Advanced filtering and search capabilities.*
+
+### Admin Dashboard
+> *The command center for business operations.*
+
+![Admin Analytics](https://via.placeholder.com/800x450?text=Analytics+Dashboard+Screenshot)
+*Visualizing sales data and customer engagement.*
+
+![Order Management](https://via.placeholder.com/800x450?text=Order+Management+Screenshot)
+*Streamlined workflow for processing and tracking orders.*
+
+---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-
-Before you begin, ensure you have the following installed:
-
-- Node.js (v14.0.0 or higher)
-- npm or yarn package manager
-- Git
+- Node.js (v20+)
+- PostgreSQL
+- Cloudinary Account (for image uploads)
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/SoumikDebnath001/BasantiShop.git
+   git clone https://github.com/yourusername/BasantiShop.git
    cd BasantiShop
    ```
 
-2. **Install dependencies**
+2. **Setup Backend**
    ```bash
+   cd Backend
    npm install
+   # Create .env (use .env.example as a template)
+   npx prisma migrate dev
+   npm run dev
    ```
-   or
+
+3. **Setup Frontend**
    ```bash
-   yarn install
+   cd ../frontend
+   npm install
+   # Create .env (VITE_API_BASE_URL=http://localhost:8000/api)
+   npm run dev
    ```
-
-3. **Configure environment variables**
-   ```bash
-   cp .env.example .env
-   # Edit .env with your configuration
-   ```
-
-4. **Start the development server**
-   ```bash
-   npm start
-   ```
-   or
-   ```bash
-   yarn start
-   ```
-
-The application will be available at `http://localhost:3000`
-
-## 💻 Usage
-
-### For Users
-
-1. Create an account or log in
-2. Browse products using the search and filter options
-3. Add items to your cart
-4. Proceed to checkout
-5. Complete payment
-6. Track your order in real-time
-
-### For Developers
-
-- Check the [CONTRIBUTING](#contributing) section for development guidelines
-- Review the project structure to understand the codebase
-- Refer to API documentation for backend integration
-
-## 📁 Project Structure
-
-```
-BasantiShop/
-├── public/                 # Static files
-├── src/
-│   ├── components/        # React components
-│   ├── pages/            # Page components
-│   ├── styles/           # CSS and styling
-│   ├── utils/            # Utility functions
-│   ├── services/         # API services
-│   └── App.js           # Main app component
-├── .env.example          # Environment variables template
-├── package.json          # Project dependencies
-└── README.md            # This file
-```
-
-## 🖼️ Images & Media
-
-### Uploading Product Images
-
-To upload and manage product images in BasantiShop:
-
-#### Methods to Add Images
-
-1. **Upload via Dashboard**
-   - Navigate to the admin panel
-   - Go to Products → Add New Product
-   - Click on "Upload Image" button
-   - Select image from your computer (JPG, PNG, WebP formats)
-   - Drag and drop images directly onto the upload area
-
-2. **Bulk Upload**
-   - Use the bulk upload feature in the admin panel
-   - Prepare images in a folder (max 10MB per image)
-   - Use the batch upload tool
-
-3. **Image Storage Locations**
-   ```
-   /public/images/
-   ├── products/          # Product images
-   ├── categories/        # Category images
-   ├── banners/          # Banner images
-   └── thumbnails/       # Thumbnail images
-   ```
-
-#### Image Guidelines
-
-- **Recommended Formats:** JPG, PNG, WebP
-- **File Size:** Maximum 10MB per image
-- **Resolution:** 
-  - Product images: 800x800px or higher
-  - Thumbnails: 300x300px
-  - Banners: 1920x400px
-- **Quality:** Minimum 72 DPI
-
-#### Adding Images Programmatically
-
-```javascript
-import { uploadImage } from './services/imageService';
-
-const handleImageUpload = async (file) => {
-  try {
-    const response = await uploadImage(file, 'products');
-    console.log('Image uploaded:', response.url);
-  } catch (error) {
-    console.error('Upload failed:', error);
-  }
-};
-```
-
-#### Markdown Image Usage
-
-To display images in documentation:
-
-```markdown
-![Product Name](./public/images/products/product-name.jpg)
-```
-
-#### Image Optimization
-
-We use image optimization for better performance:
-
-```javascript
-import Image from 'next/image';
-
-<Image
-  src="/images/products/product.jpg"
-  alt="Product Description"
-  width={800}
-  height={800}
-  quality={85}
-/>
-```
-
-## 🤝 Contributing
-
-We welcome contributions! Here's how you can help:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-### Contribution Guidelines
-
-- Follow the existing code style
-- Write meaningful commit messages
-- Update documentation as needed
-- Test your changes thoroughly
-- Ensure no console errors or warnings
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 📞 Support
-
-For support, please:
-
-- 📧 Email: support@basantishop.com
-- 🐛 Report issues on [GitHub Issues](https://github.com/SoumikDebnath001/BasantiShop/issues)
-- 💬 Join our community discussions
-- 📖 Check the documentation wiki
 
 ---
 
-**Made with ❤️ by the BasantiShop Team**
+## 📄 License
 
-*Last Updated: 2026-05-04*
+This project is licensed under the MIT License.
+
+---
+
+*Built with ❤️ by [Your Name/Soumik]*
