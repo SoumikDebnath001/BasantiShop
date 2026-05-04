@@ -1,4 +1,4 @@
-# Luxe — Modern E-Commerce Platform
+#Basanti Shop
 
 ![Logo](frontend/logo.png)
 
@@ -8,7 +8,7 @@ Luxe is a premium, full-stack e-commerce solution designed to provide a seamless
 
 ## 🌟 Purpose
 
-The purpose of **BasantiShop (Luxe)** is to demonstrate a production-ready e-commerce ecosystem. It bridges the gap between a high-end customer storefront and a data-driven administrative backend, showcasing how modern web technologies can handle complex business logic, real-time analytics, and secure transactions.
+The purpose of **BasantiShop** is to demonstrate a production-ready e-commerce ecosystem. It bridges the gap between a high-end customer storefront and a data-driven administrative backend, showcasing how modern web technologies can handle complex business logic, real-time analytics, and secure transactions.
 
 ---
 
