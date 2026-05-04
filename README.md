@@ -1,14 +1,14 @@
-# Basanti Shop
+# Luxe — Modern E-Commerce Platform
 
 ![Logo](frontend/logo.png)
 
-BasantiShop is a premium, full-stack e-commerce solution designed to provide a seamless shopping experience for users and a robust management system for administrators. Built with a modern tech stack, it empowers businesses with advanced order management, real-time analytics, and cloud-powered media handling.
+Luxe is a premium, full-stack e-commerce solution designed to provide a seamless shopping experience for users and a robust management system for administrators. Built with a modern tech stack, it emphasizes performance, security, and a sophisticated aesthetic.
 
 ---
 
 ## 🌟 Purpose
 
-The purpose of **BasantiShop** is to demonstrate a production-ready e-commerce ecosystem. It bridges the gap between a high-end customer storefront and a data-driven administrative backend, showcasing professional software engineering practices and scalable architecture.
+The purpose of **BasantiShop (Luxe)** is to demonstrate a production-ready e-commerce ecosystem. It bridges the gap between a high-end customer storefront and a data-driven administrative backend, showcasing how modern web technologies can handle complex business logic, real-time analytics, and secure transactions.
 
 ---
 
@@ -46,34 +46,14 @@ This project showcases a wide range of professional software engineering skills:
 ### 🎥 Customer Experience Walkthrough
 > *A quick look at the storefront, product catalog, and checkout flow.*
 
-![Customer Demo Video](./Screencast%20from%202026-05-04%2018-40-23.webm)
+![Customer Demo Video](./Screencast%20from%202026-05-04%2018-40-23.mp4)
 
 ---
 
 ### 🎥 Admin Dashboard & Management
 > *Deep dive into the administrative tools, analytics, and order management.*
 
-![Admin Demo Video](./Screencast%20from%202026-05-04%2018-48-34.webm)
-
----
-
-### Customer Storefront
-> *A clean and inviting interface designed to convert visitors into customers.*
-
-![Home Page Screenshot](https://via.placeholder.com/800x450?text=Home+Page+Screenshot)
-*Home page featuring curated collections and featured products.*
-
-![Product Catalog](https://via.placeholder.com/800x450?text=Shop+Page+Screenshot)
-*Advanced filtering and search capabilities.*
-
-### Admin Dashboard
-> *The command center for business operations.*
-
-![Admin Analytics](https://via.placeholder.com/800x450?text=Analytics+Dashboard+Screenshot)
-*Visualizing sales data and customer engagement.*
-
-![Order Management](https://via.placeholder.com/800x450?text=Order+Management+Screenshot)
-*Streamlined workflow for processing and tracking orders.*
+![Admin Demo Video](./Screencast%20from%202026-05-04%2018-48-34.mp4)
 
 ---
 
@@ -88,7 +68,7 @@ This project showcases a wide range of professional software engineering skills:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/SoumikDebnath001/BasantiShop.git
+   git clone https://github.com/yourusername/BasantiShop.git
    cd BasantiShop
    ```
 
@@ -117,4 +97,4 @@ This project is licensed under the MIT License.
 
 ---
 
-*Built with ❤️ by Soumik Debnath*
+*Built with ❤️ by [Your Name/Soumik]*
