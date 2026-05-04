@@ -1,14 +1,14 @@
-#Basanti Shop
+# Basanti Shop
 
 ![Logo](frontend/logo.png)
 
-Luxe is a premium, full-stack e-commerce solution designed to provide a seamless shopping experience for users and a robust management system for administrators. Built with a modern tech stack, it emphasizes performance, security, and a sophisticated aesthetic.
+BasantiShop is a premium, full-stack e-commerce solution designed to provide a seamless shopping experience for users and a robust management system for administrators. Built with a modern tech stack, it empowers businesses with advanced order management, real-time analytics, and cloud-powered media handling.
 
 ---
 
 ## 🌟 Purpose
 
-The purpose of **BasantiShop** is to demonstrate a production-ready e-commerce ecosystem. It bridges the gap between a high-end customer storefront and a data-driven administrative backend, showcasing how modern web technologies can handle complex business logic, real-time analytics, and secure transactions.
+The purpose of **BasantiShop** is to demonstrate a production-ready e-commerce ecosystem. It bridges the gap between a high-end customer storefront and a data-driven administrative backend, showcasing professional software engineering practices and scalable architecture.
 
 ---
 
@@ -88,7 +88,7 @@ This project showcases a wide range of professional software engineering skills:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/BasantiShop.git
+   git clone https://github.com/SoumikDebnath001/BasantiShop.git
    cd BasantiShop
    ```
 
@@ -117,4 +117,4 @@ This project is licensed under the MIT License.
 
 ---
 
-*Built with ❤️ by [Your Name/Soumik]*
+*Built with ❤️ by Soumik Debnath*
