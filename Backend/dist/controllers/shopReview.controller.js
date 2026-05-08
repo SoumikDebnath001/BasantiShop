@@ -15,6 +15,11 @@ export const shopReviewController = {
         res.set('Cache-Control', 'public, max-age=60');
         res.json(rows);
     },
+    async deleteOne(req, res) {
+        const id = req.params['id'];
+        await shopReviewService.deleteById(id);
+        res.status(204).end();
+    },
     async summary(_req, res) {
         const s = await shopReviewService.publicSummary();
         res.set('Cache-Control', 'public, max-age=60');

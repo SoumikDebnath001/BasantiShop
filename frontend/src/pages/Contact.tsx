@@ -5,6 +5,13 @@ import { FormInput, FormTextarea } from '../components/FormInput'
 import { contactService } from '../services/contactService'
 import { useToast } from '../context/ToastContext'
 import { ContactPayload } from '../types'
+import Seo from '../components/Seo'
+
+const INFO = [
+  { icon: MapPin, label: 'Jyotinagar, Siliguri, WB' },
+  { icon: Mail, label: 'basantistore7@gmail.com' },
+  { icon: Phone, label: '+91 89675 50790' },
+]
 
 export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -15,7 +22,7 @@ export default function Contact() {
     setIsSubmitting(true)
     try {
       await contactService.sendContact(data)
-      showToast('Message sent successfully!', 'success')
+      showToast('Message sent!', 'success')
       reset()
     } catch {
       showToast('Failed to send. Please try again.', 'error')
@@ -25,85 +32,78 @@ export default function Contact() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 animate-fade-in">
-      <div className="max-w-2xl mx-auto text-center mb-12">
-        <h1 className="font-display text-4xl font-bold text-charcoal mb-3">Get in Touch</h1>
-        <p className="text-muted">Have a question or want to enquire about a product? We'd love to hear from you.</p>
+    <div className="max-w-lg mx-auto px-4 py-7 md:py-12 animate-fade-in">
+      <Seo title="Contact us" description="Get in touch with Basanti Variety Store." />
+
+      <div className="mb-5">
+        <h1 className="font-display text-2xl md:text-3xl font-bold text-charcoal mb-1">Get in touch</h1>
+        <p className="text-muted text-sm">Questions or product enquiries? We'd love to help.</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
-        {/* Info */}
-        <div className="space-y-5">
-          {[
-            { icon: MapPin, title: 'Address', detail: 'Bottle company more, Jyotinagar, Siliguri, WB' },
-            { icon: Mail, title: 'Email', detail: 'basantistore7@gmai.com' },
-            { icon: Phone, title: 'Phone', detail: '8967550790' },
-          ].map(({ icon: Icon, title, detail }) => (
-            <div key={title} className="flex gap-4 bg-white rounded-2xl p-5 border border-border">
-              <div className="w-10 h-10 bg-cream rounded-xl flex items-center justify-center shrink-0">
-                <Icon size={18} className="text-accent" />
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-1">{title}</p>
-                <p className="text-sm text-charcoal">{detail}</p>
-              </div>
+      {/* Compact info strip */}
+      <div className="flex flex-col gap-2 mb-5">
+        {INFO.map(({ icon: Icon, label }) => (
+          <div key={label} className="flex items-center gap-3 text-sm text-charcoal">
+            <div className="w-8 h-8 bg-cream border border-border rounded-xl flex items-center justify-center shrink-0">
+              <Icon size={14} className="text-accent" />
             </div>
-          ))}
-        </div>
+            <span className="text-sm text-muted">{label}</span>
+          </div>
+        ))}
+      </div>
 
-        {/* Form */}
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-border p-6">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <FormInput
-                label="Name"
-                placeholder="Full name"
-                required
-                error={errors.name?.message}
-                {...register('name', { required: 'Name is required' })}
-              />
-              <FormInput
-                label="Phone"
-                placeholder="10 digit Indian"
-                required
-                error={errors.phone?.message}
-                {...register('phone', { required: 'Phone is required' })}
-              />
-            </div>
+      {/* Form */}
+      <div className="bg-white rounded-2xl border border-border p-4 md:p-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-3.5">
+          <div className="grid grid-cols-2 gap-3">
             <FormInput
-              label="Email"
-              type="email"
-              placeholder="email@gmail.com"
+              label="Name"
+              placeholder="Full name"
               required
-              error={errors.email?.message}
-              {...register('email', {
-                required: 'Email is required',
-                pattern: { value: /^\S+@\S+\.\S+$/, message: 'Invalid email' },
-              })}
+              error={errors.name?.message}
+              {...register('name', { required: 'Required' })}
             />
             <FormInput
-              label="Subject / Product"
-              placeholder="Enquiry about..."
-              {...register('productName')}
-            />
-            <FormTextarea
-              label="Message"
-              placeholder="How can we help you?"
-              rows={5}
+              label="Phone"
+              placeholder="+91 98765…"
               required
-              error={errors.message?.message}
-              {...register('message', { required: 'Message is required', minLength: { value: 10, message: 'Please be more descriptive' } })}
+              error={errors.phone?.message}
+              {...register('phone', { required: 'Required' })}
             />
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full flex items-center justify-center gap-2 py-3.5 bg-charcoal text-white font-medium rounded-xl hover:bg-accent transition-colors disabled:opacity-60"
-            >
-              <Send size={16} />
-              {isSubmitting ? 'Sending…' : 'Send Message'}
-            </button>
-          </form>
-        </div>
+          </div>
+          <FormInput
+            label="Email"
+            type="email"
+            placeholder="email@gmail.com"
+            required
+            error={errors.email?.message}
+            {...register('email', {
+              required: 'Required',
+              pattern: { value: /^\S+@\S+\.\S+$/, message: 'Invalid email' },
+            })}
+          />
+          <FormInput
+            label="Subject (optional)"
+            placeholder="Enquiry about…"
+            {...register('productName')}
+          />
+          <FormTextarea
+            label="Message"
+            placeholder="How can we help?"
+            rows={3}
+            required
+            error={errors.message?.message}
+            {...register('message', { required: 'Required', minLength: { value: 10, message: 'Too short' } })}
+          />
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full flex items-center justify-center gap-2 py-4 bg-charcoal text-white font-semibold rounded-2xl hover:bg-accent transition-colors disabled:opacity-60 text-[15px]"
+          >
+            <Send size={15} />
+            {isSubmitting ? 'Sending…' : 'Send Message'}
+          </button>
+        </form>
       </div>
     </div>
   )

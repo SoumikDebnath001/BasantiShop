@@ -49,7 +49,14 @@ export const orderService = {
     await axiosInstance.delete(API_ENDPOINTS.ORDER(id))
   },
 
-  /** Download invoice PDF (owner only). */
+  /** Fetch invoice PDF as a blob URL for in-page viewing. Caller must revoke the URL when done. */
+  async getInvoiceBlobUrl(orderId: string): Promise<string> {
+    const res = await axiosInstance.get(API_ENDPOINTS.ORDER_INVOICE(orderId), { responseType: 'blob' })
+    const blob = new Blob([res.data], { type: 'application/pdf' })
+    return URL.createObjectURL(blob)
+  },
+
+  /** Download invoice PDF (owner or admin). */
   async downloadInvoice(orderId: string, filename = `invoice-${orderId}.pdf`): Promise<void> {
     const res = await axiosInstance.get(API_ENDPOINTS.ORDER_INVOICE(orderId), {
       responseType: 'blob',

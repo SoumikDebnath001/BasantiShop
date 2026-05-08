@@ -1,6 +1,6 @@
 import { prisma } from '../config/prisma.js'
 import { Prisma } from '@prisma/client'
-import type { OrderStatus } from '@prisma/client'
+import type { OrderStatus, PaymentMethod, PaymentStatus } from '@prisma/client'
 import { generateOrderInvoicePdf } from './invoice.service.js'
 
 function orderDto(o: {
@@ -10,6 +10,10 @@ function orderDto(o: {
   totalAmount: Prisma.Decimal
   finalTotalAmount: Prisma.Decimal | null
   status: OrderStatus
+  paymentMethod: PaymentMethod
+  paymentStatus: PaymentStatus
+  razorpayOrderId: string | null
+  razorpayPaymentId: string | null
   deliveredAt: Date | null
   invoiceUrl: string | null
   createdAt: Date
@@ -33,6 +37,9 @@ function orderDto(o: {
     finalTotalAmount: final,
     displayTotal: final ?? listed,
     status: o.status,
+    paymentMethod: o.paymentMethod,
+    paymentStatus: o.paymentStatus,
+    razorpayPaymentId: o.razorpayPaymentId,
     deliveredAt: o.deliveredAt?.toISOString() ?? null,
     invoiceUrl: o.invoiceUrl ?? null,
     createdAt: o.createdAt.toISOString(),
@@ -239,6 +246,25 @@ export const orderService = {
         items: true,
       },
     })
+
+    // Generate confirmation invoice so the bill is available immediately after confirm
+    try {
+      const invoiceRel = await generateOrderInvoicePdf({
+        id: updated.id,
+        createdAt: updated.createdAt,
+        user: { name: updated.user.name, email: updated.user.email },
+        items: updated.items,
+        displayTotal: Number(updated.finalTotalAmount ?? updated.totalAmount),
+      })
+      await prisma.order.update({
+        where: { id: orderId },
+        data: { invoiceUrl: invoiceRel },
+      })
+      updated.invoiceUrl = invoiceRel
+    } catch {
+      // Non-fatal: bill can be regenerated at delivery
+    }
+
     return orderDto(updated)
   },
 

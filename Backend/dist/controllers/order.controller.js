@@ -36,17 +36,18 @@ export const orderController = {
     },
     async downloadInvoice(req, res) {
         const orderId = String(req.params.id);
-        const userId = req.user.id;
+        const requester = req.user;
+        const isAdmin = requester.role === 'admin';
         const order = await orderService.findRawForInvoice(orderId);
         if (!order) {
             res.status(404).json({ error: 'Order not found' });
             return;
         }
-        if (order.userId !== userId) {
+        if (!isAdmin && order.userId !== requester.id) {
             res.status(403).json({ error: 'Forbidden' });
             return;
         }
-        if (order.status !== 'DELIVERED' || !order.invoiceUrl) {
+        if (!['CONFIRMED', 'DELIVERED', 'RETURNED'].includes(order.status) || !order.invoiceUrl) {
             res.status(404).json({ error: 'Invoice not available' });
             return;
         }

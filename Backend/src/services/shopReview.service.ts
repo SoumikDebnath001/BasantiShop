@@ -55,6 +55,10 @@ export const shopReviewService = {
     }))
   },
 
+  async deleteById(id: string) {
+    await prisma.shopReview.delete({ where: { id } })
+  },
+
   async publicSummary() {
     const agg = await prisma.shopReview.aggregate({
       _avg: { rating: true },

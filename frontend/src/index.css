@@ -5,32 +5,45 @@
 @layer base {
   *, *::before, *::after {
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
   }
 
   html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* prevent layout shift from scrollbar */
+    scrollbar-gutter: stable;
   }
 
   body {
     @apply bg-cream text-charcoal font-sans;
+    font-size: 15px;
+    line-height: 1.6;
+    overscroll-behavior: none;
   }
 
-  /* Custom scrollbar */
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+  /* Inputs must be at least 16px to prevent iOS zoom */
+  input, textarea, select {
+    font-size: 16px !important;
   }
-  ::-webkit-scrollbar-track {
-    background: transparent;
+
+  /* Better focus outlines */
+  :focus-visible {
+    @apply outline-none ring-2 ring-accent/40 ring-offset-1;
   }
-  ::-webkit-scrollbar-thumb {
-    @apply bg-border rounded-full;
+
+  /* Custom scrollbar — desktop only */
+  @media (pointer: fine) {
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { @apply bg-border rounded-full; }
+    ::-webkit-scrollbar-thumb:hover { @apply bg-muted/30; }
   }
-  ::-webkit-scrollbar-thumb:hover {
-    @apply bg-muted/40;
-  }
+
+  /* Safe-area helpers for notched phones */
+  .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .mb-safe { margin-bottom: env(safe-area-inset-bottom, 0px); }
 }
 
 @layer components {
@@ -45,5 +58,26 @@
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+  }
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  /* Consistent page container */
+  .page-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Primary button */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-4 bg-charcoal text-white font-semibold rounded-2xl hover:bg-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-[15px];
+  }
+
+  /* Secondary button */
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-4 border border-border text-charcoal font-semibold rounded-2xl hover:border-charcoal/30 hover:bg-white transition-colors disabled:opacity-50 text-[15px];
   }
 }

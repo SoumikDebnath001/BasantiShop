@@ -6,8 +6,8 @@ export declare const shopReviewService: {
         message: string;
         createdAt: string;
         user: {
-            email: string;
             name: string;
+            email: string;
             id: string;
         };
     }>;
@@ -18,8 +18,8 @@ export declare const shopReviewService: {
         message: string;
         createdAt: string;
         user: {
-            email: string;
             name: string;
+            email: string;
             id: string;
         };
     }[]>;
@@ -30,11 +30,12 @@ export declare const shopReviewService: {
         message: string;
         createdAt: string;
         user: {
-            email: string;
             name: string;
+            email: string;
             id: string;
         };
     }[]>;
+    deleteById(id: string): Promise<void>;
     publicSummary(): Promise<{
         averageRating: number;
         reviewCount: number;

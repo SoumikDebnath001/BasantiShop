@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import compression from 'compression';
 import { allowedCorsOrigins, isProd } from './config/env.js';
 import { authRouter } from './routes/auth.routes.js';
 import { productRouter } from './routes/product.routes.js';
@@ -14,6 +15,8 @@ import { shopRouter } from './routes/shop.routes.js';
 import { adminRouter } from './routes/admin.routes.js';
 import { categoryRouter } from './routes/category.routes.js';
 import { searchRouter } from './routes/search.routes.js';
+import { homepageRouter } from './routes/homepage.routes.js';
+import { paymentRouter } from './routes/payment.routes.js';
 import { notFound } from './middlewares/notFound.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { apiRateLimiter, authRateLimiter } from './middlewares/rateLimit.js';
@@ -21,10 +24,9 @@ export function createApp() {
     const app = express();
     app.disable('x-powered-by');
     app.set('trust proxy', 1);
-    app.use(helmet());
+    app.use(isProd ? helmet() : helmet({ contentSecurityPolicy: false }));
     app.use(cors({
         origin(origin, cb) {
-            // Allow non-browser requests without Origin header (health checks, server-to-server).
             if (!origin)
                 return cb(null, true);
             if (allowedCorsOrigins.includes(origin))
@@ -33,6 +35,7 @@ export function createApp() {
         },
         credentials: false,
     }));
+    app.use(compression());
     app.use(express.json({ limit: '2mb' }));
     app.use(morgan(isProd ? 'combined' : 'dev'));
     app.get('/health', (_req, res) => res.json({ ok: true }));
@@ -48,6 +51,8 @@ export function createApp() {
     app.use('/api/analytics', analyticsRouter);
     app.use('/api/shop', shopRouter);
     app.use('/api/admin', adminRouter);
+    app.use('/api/homepage', homepageRouter);
+    app.use('/api/payments', paymentRouter);
     app.use(notFound);
     app.use(errorHandler);
     return app;

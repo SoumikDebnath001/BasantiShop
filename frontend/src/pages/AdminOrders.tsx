@@ -7,6 +7,8 @@ import {
   Truck,
   RotateCcw,
   Ban,
+  CreditCard,
+  Banknote,
 } from 'lucide-react'
 import { orderService } from '../services/orderService'
 import { useToast } from '../context/ToastContext'
@@ -16,6 +18,14 @@ import { getApiErrorMessage } from '../utils/apiError'
 import Modal from '../components/Modal'
 
 type Tab = 'pending' | 'confirmed' | 'delivered'
+
+function paymentStatusStyle(status: string) {
+  switch (status) {
+    case 'PAID':    return 'bg-emerald-50 text-emerald-700'
+    case 'FAILED':  return 'bg-red-50 text-red-700'
+    default:        return 'bg-amber-50 text-amber-700'
+  }
+}
 
 function statusStyle(status: string) {
   switch (status) {
@@ -193,7 +203,27 @@ export default function AdminOrders() {
                     {order.status}
                   </span>
                 </div>
+                <div>
+                  <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-1">Payment</p>
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full bg-gray-100 text-charcoal">
+                      {order.paymentMethod === 'ONLINE'
+                        ? <><CreditCard size={11} />Online</>
+                        : <><Banknote size={11} />COD</>
+                      }
+                    </span>
+                    <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${paymentStatusStyle(order.paymentStatus)}`}>
+                      {order.paymentStatus}
+                    </span>
+                  </div>
+                </div>
               </div>
+
+              {order.razorpayPaymentId && (
+                <p className="text-xs text-muted mb-1">
+                  Razorpay ID: <span className="font-mono">{order.razorpayPaymentId}</span>
+                </p>
+              )}
 
               <p className="text-xs text-muted mb-2">{formatDate(order.createdAt)}</p>
 

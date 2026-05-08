@@ -21,8 +21,8 @@ export declare const adminLogService: {
         details: Prisma.JsonValue;
         createdAt: string;
         admin: {
-            email: string;
             name: string;
+            email: string;
             id: string;
         };
     }[]>;

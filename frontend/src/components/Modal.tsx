@@ -24,24 +24,44 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
 
   if (!isOpen) return null
 
-  const widths = { sm: 'max-w-sm', md: 'max-w-lg', lg: 'max-w-2xl' }
+  const desktopWidths = { sm: 'md:max-w-sm', md: 'md:max-w-lg', lg: 'md:max-w-2xl' }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-charcoal/40 backdrop-blur-sm" onClick={onClose} />
-      <div className={`relative bg-white rounded-2xl shadow-2xl w-full ${widths[size]} animate-slide-up`}>
-        {(title || true) && (
-          <div className="flex items-center justify-between p-6 border-b border-border">
-            {title && <h2 className="font-display text-xl font-semibold text-charcoal">{title}</h2>}
-            <button
-              onClick={onClose}
-              className="ml-auto p-2 rounded-xl hover:bg-gray-100 transition-colors text-muted hover:text-charcoal"
-            >
-              <X size={18} />
-            </button>
-          </div>
-        )}
-        <div className="p-6">{children}</div>
+    <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center">
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-charcoal/50 backdrop-blur-sm"
+        onClick={onClose}
+      />
+
+      {/* Sheet / Modal */}
+      <div
+        className={`relative bg-white w-full ${desktopWidths[size]}
+          rounded-t-3xl md:rounded-2xl shadow-sheet
+          animate-sheet-up md:animate-slide-up
+          max-h-[92vh] flex flex-col`}
+      >
+        {/* Handle pill — mobile only */}
+        <div className="md:hidden flex justify-center pt-3 pb-1 shrink-0">
+          <div className="w-10 h-1 bg-border rounded-full" />
+        </div>
+
+        {/* Header */}
+        <div className="flex items-center justify-between px-5 md:px-6 py-4 border-b border-border shrink-0">
+          {title && (
+            <h2 className="font-display text-lg md:text-xl font-semibold text-charcoal">{title}</h2>
+          )}
+          <button
+            onClick={onClose}
+            className="ml-auto p-2 rounded-xl hover:bg-gray-100 transition-colors text-muted hover:text-charcoal"
+            aria-label="Close"
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="p-5 md:p-6 overflow-y-auto">{children}</div>
       </div>
     </div>
   )

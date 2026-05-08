@@ -43,6 +43,10 @@ export const shopReviewService = {
     return normalizeReviews(data)
   },
 
+  async deleteReview(id: string): Promise<void> {
+    await axiosInstance.delete(API_ENDPOINTS.SHOP_REVIEW(id))
+  },
+
   async listPublic(): Promise<ShopReview[]> {
     const { data } = await axiosInstance.get<ShopReview[]>(API_ENDPOINTS.SHOP_REVIEWS_PUBLIC)
     return normalizeReviews(data)
