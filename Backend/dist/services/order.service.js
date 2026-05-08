@@ -12,6 +12,9 @@ function orderDto(o) {
         finalTotalAmount: final,
         displayTotal: final ?? listed,
         status: o.status,
+        paymentMethod: o.paymentMethod,
+        paymentStatus: o.paymentStatus,
+        razorpayPaymentId: o.razorpayPaymentId,
         deliveredAt: o.deliveredAt?.toISOString() ?? null,
         invoiceUrl: o.invoiceUrl ?? null,
         createdAt: o.createdAt.toISOString(),
@@ -198,6 +201,24 @@ export const orderService = {
                 items: true,
             },
         });
+        // Generate confirmation invoice so the bill is available immediately after confirm
+        try {
+            const invoiceRel = await generateOrderInvoicePdf({
+                id: updated.id,
+                createdAt: updated.createdAt,
+                user: { name: updated.user.name, email: updated.user.email },
+                items: updated.items,
+                displayTotal: Number(updated.finalTotalAmount ?? updated.totalAmount),
+            });
+            await prisma.order.update({
+                where: { id: orderId },
+                data: { invoiceUrl: invoiceRel },
+            });
+            updated.invoiceUrl = invoiceRel;
+        }
+        catch {
+            // Non-fatal: bill can be regenerated at delivery
+        }
         return orderDto(updated);
     },
     async unconfirm(orderId) {

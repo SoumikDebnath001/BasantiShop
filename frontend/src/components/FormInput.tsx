@@ -18,19 +18,19 @@ export const FormInput = forwardRef<HTMLInputElement, InputProps>(
       {label && (
         <label className="block text-sm font-medium text-charcoal">
           {label}
-          {props.required && <span className="text-red-400 ml-0.5">*</span>}
+          {props.required && <span className="text-accent ml-0.5">*</span>}
         </label>
       )}
       <input
         ref={ref}
-        className={`w-full px-4 py-3 bg-white border rounded-xl text-sm text-charcoal placeholder:text-gray-400 outline-none transition-all
+        className={`w-full px-4 py-4 bg-white border rounded-2xl text-charcoal placeholder:text-gray-400 outline-none transition-all
           focus:border-accent focus:ring-2 focus:ring-accent/10
           ${error ? 'border-red-300 focus:border-red-400 focus:ring-red-100' : 'border-border'}
           ${className}`}
         {...props}
       />
-      {hint && !error && <p className="text-xs text-muted">{hint}</p>}
-      {error && <p className="text-xs text-red-500">{error}</p>}
+      {hint && !error && <p className="text-xs text-muted pl-1">{hint}</p>}
+      {error && <p className="text-xs text-red-500 pl-1">{error}</p>}
     </div>
   )
 )
@@ -42,19 +42,19 @@ export const FormTextarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       {label && (
         <label className="block text-sm font-medium text-charcoal">
           {label}
-          {props.required && <span className="text-red-400 ml-0.5">*</span>}
+          {props.required && <span className="text-accent ml-0.5">*</span>}
         </label>
       )}
       <textarea
         ref={ref}
         rows={rows}
-        className={`w-full px-4 py-3 bg-white border rounded-xl text-sm text-charcoal placeholder:text-gray-400 outline-none transition-all resize-none
+        className={`w-full px-4 py-4 bg-white border rounded-2xl text-charcoal placeholder:text-gray-400 outline-none transition-all resize-none
           focus:border-accent focus:ring-2 focus:ring-accent/10
           ${error ? 'border-red-300' : 'border-border'}
           ${className}`}
         {...props}
       />
-      {error && <p className="text-xs text-red-500">{error}</p>}
+      {error && <p className="text-xs text-red-500 pl-1">{error}</p>}
     </div>
   )
 )

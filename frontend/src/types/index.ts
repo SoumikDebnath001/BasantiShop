@@ -25,15 +25,26 @@ export interface RegisterPayload {
   phone?: string
 }
 
+// ─── Homepage ─────────────────────────────────────────────────
+export interface HomepageContent {
+  id: string
+  heroHeadline: string
+  heroSubtext: string
+  heroCta: string
+  announcementBanner: string | null
+  announcementEnabled: boolean
+  aboutTitle: string
+  aboutText: string
+  updatedAt: string
+}
+
 // ─── Product ─────────────────────────────────────────────────
 export interface Product {
   id: string
-  /** SEO URL segment; older cached carts may omit */
   slug?: string
   name: string
   description: string
   price: number
-  /** Admin-only from admin API */
   originalPrice?: number
   sellingPrice?: number
   category: string
@@ -85,6 +96,8 @@ export interface ContactHistoryItem {
 
 // ─── Orders ──────────────────────────────────────────────────
 export type OrderStatus = 'PENDING' | 'CONFIRMED' | 'DELIVERED' | 'RETURNED' | 'CANCELLED'
+export type PaymentMethod = 'COD' | 'ONLINE'
+export type PaymentStatus = 'UNPAID' | 'PAID' | 'FAILED'
 
 export interface OrderLineItem {
   id: string
@@ -104,6 +117,9 @@ export interface Order {
   finalTotalAmount: number | null
   displayTotal: number
   status: OrderStatus
+  paymentMethod: PaymentMethod
+  paymentStatus: PaymentStatus
+  razorpayPaymentId: string | null
   deliveredAt: string | null
   invoiceUrl: string | null
   createdAt: string
@@ -137,7 +153,7 @@ export type PatchOrderPayload =
   | { status: 'RETURNED' }
   | { status: 'CANCELLED' }
 
-// ─── Analytics (admin) ─────────────────────────────────────
+// ─── Analytics ───────────────────────────────────────────────
 export interface ProfitLossSummary {
   totalSales: number
   totalProfit: number
@@ -204,7 +220,6 @@ export interface PaginatedResponse<T> {
 // ─── Filters ─────────────────────────────────────────────────
 export interface ProductFilters {
   search: string
-  /** Empty string = no category selected (do not load products). */
   category: string
   minPrice: number | ''
   maxPrice: number | ''

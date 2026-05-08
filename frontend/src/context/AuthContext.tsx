@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
-import { User, LoginPayload, RegisterPayload } from '../types'
+import { User, AuthResponse, LoginPayload, RegisterPayload } from '../types'
 import { authService } from '../services/authService'
 import { setAuth, clearAuth, getUser, getToken } from '../utils/auth'
 
@@ -9,6 +9,7 @@ interface AuthContextType {
   isLoading: boolean
   login: (payload: LoginPayload) => Promise<void>
   register: (payload: RegisterPayload) => Promise<void>
+  setAuthFromResponse: (response: AuthResponse) => void
   logout: () => void
   updateUser: (user: User) => void
   isAuthenticated: boolean
@@ -47,13 +48,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       })
   }, [])
 
+  const setAuthFromResponse = ({ token: t, user: u }: AuthResponse) => {
+    setAuth(t, u)
+    setToken(t)
+    setUser(u)
+  }
+
   const login = async (payload: LoginPayload) => {
     setIsLoading(true)
     try {
-      const { token, user } = await authService.login(payload)
-      setAuth(token, user)
-      setToken(token)
-      setUser(user)
+      const response = await authService.login(payload)
+      setAuthFromResponse(response)
     } finally {
       setIsLoading(false)
     }
@@ -62,10 +67,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const register = async (payload: RegisterPayload) => {
     setIsLoading(true)
     try {
-      const { token, user } = await authService.register(payload)
-      setAuth(token, user)
-      setToken(token)
-      setUser(user)
+      const result = await authService.registerInitiate(payload)
+      // Registration now requires OTP verification — caller handles the result
+      return result as any
     } finally {
       setIsLoading(false)
     }
@@ -91,6 +95,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         isLoading,
         login,
         register,
+        setAuthFromResponse,
         logout,
         updateUser,
         isAuthenticated: !!token,

@@ -1,4 +1,3 @@
-// App route map — all active paths wired to real pages. No unused route entries at this time.
 import { Routes, Route, Navigate } from 'react-router-dom'
 import MainLayout from '../layouts/MainLayout'
 import AdminLayout from '../layouts/AdminLayout'
@@ -12,6 +11,7 @@ import Cart from '../pages/Cart'
 import Contact from '../pages/Contact'
 import Login from '../pages/Login'
 import Register from '../pages/Register'
+import ForgotPassword from '../pages/ForgotPassword'
 import Dashboard from '../pages/Dashboard'
 import AdminDashboard from '../pages/AdminDashboard'
 import AdminProducts from '../pages/AdminProducts'
@@ -21,6 +21,8 @@ import AdminAnalytics from '../pages/AdminAnalytics'
 import AdminShopReviews from '../pages/AdminShopReviews'
 import AdminLogs from '../pages/AdminLogs'
 import AdminContactMessages from '../pages/AdminContactMessages'
+import AdminHomepage from '../pages/AdminHomepage'
+import AdminBills from '../pages/AdminBills'
 import ProductForm from '../pages/ProductForm'
 import NotFound from '../pages/NotFound'
 
@@ -29,59 +31,21 @@ export default function AppRoutes() {
     <Routes>
       <Route element={<MainLayout />}>
         <Route index element={<Home />} />
-        <Route
-          path="categories"
-          element={
-            <ProtectedRoute>
-              <Categories />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="products"
-          element={
-            <ProtectedRoute>
-              <Products />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="products/:id"
-          element={
-            <ProtectedRoute>
-              <ProductDetails />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="cart"
-          element={
-            <ProtectedRoute>
-              <Cart />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="categories" element={<ProtectedRoute><Categories /></ProtectedRoute>} />
+        <Route path="products" element={<ProtectedRoute><Products /></ProtectedRoute>} />
+        <Route path="products/:id" element={<ProtectedRoute><ProductDetails /></ProtectedRoute>} />
+        <Route path="cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
         <Route path="contact" element={<Contact />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
-        <Route
-          path="dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="forgot-password" element={<ForgotPassword />} />
+        <Route path="dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />
       </Route>
 
       <Route
         path="admin"
-        element={
-          <ProtectedRoute requireAdmin>
-            <AdminLayout />
-          </ProtectedRoute>
-        }
+        element={<ProtectedRoute requireAdmin><AdminLayout /></ProtectedRoute>}
       >
         <Route index element={<AdminDashboard />} />
         <Route path="categories" element={<AdminCategories />} />
@@ -93,6 +57,8 @@ export default function AppRoutes() {
         <Route path="products" element={<AdminProducts />} />
         <Route path="products/new" element={<ProductForm />} />
         <Route path="products/:id/edit" element={<ProductForm />} />
+        <Route path="homepage" element={<AdminHomepage />} />
+        <Route path="bills" element={<AdminBills />} />
         <Route path="*" element={<Navigate to="/admin" replace />} />
       </Route>
     </Routes>

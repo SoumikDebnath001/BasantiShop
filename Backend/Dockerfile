@@ -20,6 +20,9 @@ COPY --from=builder /app/dist ./dist
 COPY prisma ./prisma
 COPY prisma.config.ts ./
 
+# Pre-create uploads dir so invoice PDFs have a writable location on first run
+RUN mkdir -p uploads/invoices
+
 EXPOSE 8000
 
-CMD ["sh", "-c", "npx prisma migrate deploy || true && node dist/server.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/server.js"]

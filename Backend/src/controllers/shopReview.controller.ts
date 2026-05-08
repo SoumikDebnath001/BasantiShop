@@ -20,6 +20,12 @@ export const shopReviewController = {
     res.json(rows)
   },
 
+  async deleteOne(req: Request, res: Response) {
+    const id = req.params['id'] as string
+    await shopReviewService.deleteById(id)
+    res.status(204).end()
+  },
+
   async summary(_req: Request, res: Response) {
     const s = await shopReviewService.publicSummary()
     res.set('Cache-Control', 'public, max-age=60')

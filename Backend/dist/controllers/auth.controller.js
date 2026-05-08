@@ -1,10 +1,20 @@
-import { loginSchema, registerSchema } from '../validators/auth.schemas.js';
+import { registerInitiateSchema, registerVerifySchema, loginSchema, loginSendOtpSchema, loginVerifyOtpSchema, forgotPasswordSchema, resetPasswordSchema, } from '../validators/auth.schemas.js';
 import { authService } from '../services/auth.service.js';
 import { adminLogService, ADMIN_ACTIONS } from '../services/adminLog.service.js';
 export const authController = {
-    async register(req, res) {
-        const payload = registerSchema.parse(req.body);
-        const result = await authService.register({ ...payload, phone: payload.phone });
+    async registerInitiate(req, res) {
+        const payload = registerInitiateSchema.parse(req.body);
+        const result = await authService.registerInitiate({
+            name: payload.name,
+            email: payload.email,
+            password: payload.password,
+            ...(payload.phone ? { phone: payload.phone } : {}),
+        });
+        res.json(result);
+    },
+    async registerVerify(req, res) {
+        const payload = registerVerifySchema.parse(req.body);
+        const result = await authService.registerVerify(payload);
         res.json(result);
     },
     async login(req, res) {
@@ -15,6 +25,26 @@ export const authController = {
                 email: result.user.email,
             });
         }
+        res.json(result);
+    },
+    async loginSendOtp(req, res) {
+        const { email } = loginSendOtpSchema.parse(req.body);
+        const result = await authService.loginSendOtp(email);
+        res.json(result);
+    },
+    async loginVerifyOtp(req, res) {
+        const payload = loginVerifyOtpSchema.parse(req.body);
+        const result = await authService.loginVerifyOtp(payload);
+        res.json(result);
+    },
+    async forgotPassword(req, res) {
+        const { email } = forgotPasswordSchema.parse(req.body);
+        const result = await authService.forgotPassword(email);
+        res.json(result);
+    },
+    async resetPassword(req, res) {
+        const payload = resetPasswordSchema.parse(req.body);
+        const result = await authService.resetPassword(payload);
         res.json(result);
     },
     async me(req, res) {

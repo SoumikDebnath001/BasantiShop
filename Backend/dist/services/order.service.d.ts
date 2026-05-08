@@ -11,6 +11,9 @@ export declare const orderService: {
         finalTotalAmount: number | null;
         displayTotal: number;
         status: import("@prisma/client").$Enums.OrderStatus;
+        paymentMethod: import("@prisma/client").$Enums.PaymentMethod;
+        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
+        razorpayPaymentId: string | null;
         deliveredAt: string | null;
         invoiceUrl: string | null;
         createdAt: string;
@@ -37,6 +40,9 @@ export declare const orderService: {
         finalTotalAmount: number | null;
         displayTotal: number;
         status: import("@prisma/client").$Enums.OrderStatus;
+        paymentMethod: import("@prisma/client").$Enums.PaymentMethod;
+        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
+        razorpayPaymentId: string | null;
         deliveredAt: string | null;
         invoiceUrl: string | null;
         createdAt: string;
@@ -63,6 +69,9 @@ export declare const orderService: {
         finalTotalAmount: number | null;
         displayTotal: number;
         status: import("@prisma/client").$Enums.OrderStatus;
+        paymentMethod: import("@prisma/client").$Enums.PaymentMethod;
+        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
+        razorpayPaymentId: string | null;
         deliveredAt: string | null;
         invoiceUrl: string | null;
         createdAt: string;
@@ -99,6 +108,10 @@ export declare const orderService: {
         status: import("@prisma/client").$Enums.OrderStatus;
         finalTotalAmount: Prisma.Decimal | null;
         totalAmount: Prisma.Decimal;
+        paymentMethod: import("@prisma/client").$Enums.PaymentMethod;
+        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
+        razorpayOrderId: string | null;
+        razorpayPaymentId: string | null;
         deliveredAt: Date | null;
         invoiceUrl: string | null;
     }>;
@@ -116,6 +129,9 @@ export declare const orderService: {
         finalTotalAmount: number | null;
         displayTotal: number;
         status: import("@prisma/client").$Enums.OrderStatus;
+        paymentMethod: import("@prisma/client").$Enums.PaymentMethod;
+        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
+        razorpayPaymentId: string | null;
         deliveredAt: string | null;
         invoiceUrl: string | null;
         createdAt: string;
@@ -142,6 +158,9 @@ export declare const orderService: {
         finalTotalAmount: number | null;
         displayTotal: number;
         status: import("@prisma/client").$Enums.OrderStatus;
+        paymentMethod: import("@prisma/client").$Enums.PaymentMethod;
+        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
+        razorpayPaymentId: string | null;
         deliveredAt: string | null;
         invoiceUrl: string | null;
         createdAt: string;
@@ -168,6 +187,9 @@ export declare const orderService: {
         finalTotalAmount: number | null;
         displayTotal: number;
         status: import("@prisma/client").$Enums.OrderStatus;
+        paymentMethod: import("@prisma/client").$Enums.PaymentMethod;
+        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
+        razorpayPaymentId: string | null;
         deliveredAt: string | null;
         invoiceUrl: string | null;
         createdAt: string;
@@ -194,6 +216,9 @@ export declare const orderService: {
         finalTotalAmount: number | null;
         displayTotal: number;
         status: import("@prisma/client").$Enums.OrderStatus;
+        paymentMethod: import("@prisma/client").$Enums.PaymentMethod;
+        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
+        razorpayPaymentId: string | null;
         deliveredAt: string | null;
         invoiceUrl: string | null;
         createdAt: string;
@@ -220,6 +245,9 @@ export declare const orderService: {
         finalTotalAmount: number | null;
         displayTotal: number;
         status: import("@prisma/client").$Enums.OrderStatus;
+        paymentMethod: import("@prisma/client").$Enums.PaymentMethod;
+        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
+        razorpayPaymentId: string | null;
         deliveredAt: string | null;
         invoiceUrl: string | null;
         createdAt: string;
@@ -259,6 +287,9 @@ export declare const orderService: {
         finalTotalAmount: number | null;
         displayTotal: number;
         status: import("@prisma/client").$Enums.OrderStatus;
+        paymentMethod: import("@prisma/client").$Enums.PaymentMethod;
+        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
+        razorpayPaymentId: string | null;
         deliveredAt: string | null;
         invoiceUrl: string | null;
         createdAt: string;
@@ -285,6 +316,9 @@ export declare const orderService: {
         finalTotalAmount: number | null;
         displayTotal: number;
         status: import("@prisma/client").$Enums.OrderStatus;
+        paymentMethod: import("@prisma/client").$Enums.PaymentMethod;
+        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
+        razorpayPaymentId: string | null;
         deliveredAt: string | null;
         invoiceUrl: string | null;
         createdAt: string;
