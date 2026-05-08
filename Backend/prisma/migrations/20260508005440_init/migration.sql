@@ -4,6 +4,15 @@ CREATE TYPE "UserRole" AS ENUM ('ADMIN', 'CUSTOMER');
 -- CreateEnum
 CREATE TYPE "OrderStatus" AS ENUM ('PENDING', 'CONFIRMED', 'DELIVERED', 'RETURNED', 'CANCELLED');
 
+-- CreateEnum
+CREATE TYPE "OtpPurpose" AS ENUM ('LOGIN', 'RESET_PASSWORD');
+
+-- CreateEnum
+CREATE TYPE "PaymentMethod" AS ENUM ('COD', 'ONLINE');
+
+-- CreateEnum
+CREATE TYPE "PaymentStatus" AS ENUM ('UNPAID', 'PAID', 'FAILED');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
@@ -12,10 +21,53 @@ CREATE TABLE "User" (
     "phone" TEXT,
     "passwordHash" TEXT NOT NULL,
     "role" "UserRole" NOT NULL DEFAULT 'CUSTOMER',
+    "isEmailVerified" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "PendingRegistration" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "phone" TEXT,
+    "passwordHash" TEXT NOT NULL,
+    "otp" TEXT NOT NULL,
+    "expiresAt" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "PendingRegistration_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "OtpCode" (
+    "id" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "code" TEXT NOT NULL,
+    "purpose" "OtpPurpose" NOT NULL,
+    "expiresAt" TIMESTAMP(3) NOT NULL,
+    "used" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "OtpCode_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "HomepageContent" (
+    "id" TEXT NOT NULL DEFAULT 'singleton',
+    "heroHeadline" TEXT NOT NULL DEFAULT 'Quality variety, thoughtfully stocked.',
+    "heroSubtext" TEXT NOT NULL DEFAULT 'We are a local variety store. Create an account to explore our catalog of products.',
+    "heroCta" TEXT NOT NULL DEFAULT 'Shop Now',
+    "announcementBanner" TEXT,
+    "announcementEnabled" BOOLEAN NOT NULL DEFAULT false,
+    "aboutTitle" TEXT NOT NULL DEFAULT 'About Basanti',
+    "aboutText" TEXT NOT NULL DEFAULT 'Basanti Variety Store brings together everyday essentials and specialty finds in one place. We focus on clear pricing, honest stock levels, and helping you complete your purchase.',
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "HomepageContent_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -43,6 +95,10 @@ CREATE TABLE "Order" (
     "totalAmount" DECIMAL(12,2) NOT NULL,
     "finalTotalAmount" DECIMAL(12,2),
     "status" "OrderStatus" NOT NULL DEFAULT 'PENDING',
+    "paymentMethod" "PaymentMethod" NOT NULL DEFAULT 'COD',
+    "paymentStatus" "PaymentStatus" NOT NULL DEFAULT 'UNPAID',
+    "razorpayOrderId" TEXT,
+    "razorpayPaymentId" TEXT,
     "deliveredAt" TIMESTAMP(3),
     "invoiceUrl" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -136,7 +192,28 @@ CREATE TABLE "ContactMessage" (
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "PendingRegistration_email_key" ON "PendingRegistration"("email");
+
+-- CreateIndex
+CREATE INDEX "PendingRegistration_email_idx" ON "PendingRegistration"("email");
+
+-- CreateIndex
+CREATE INDEX "OtpCode_email_purpose_idx" ON "OtpCode"("email", "purpose");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Product_slug_key" ON "Product"("slug");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Order_razorpayOrderId_key" ON "Order"("razorpayOrderId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Order_razorpayPaymentId_key" ON "Order"("razorpayPaymentId");
+
+-- CreateIndex
+CREATE INDEX "Order_userId_status_idx" ON "Order"("userId", "status");
+
+-- CreateIndex
+CREATE INDEX "Order_paymentStatus_idx" ON "Order"("paymentStatus");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "ProductImage_productId_position_key" ON "ProductImage"("productId", "position");
