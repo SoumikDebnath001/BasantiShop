@@ -1,26 +1,11 @@
 services:
-  postgres:
-    image: postgres:16-alpine
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB:-basanti_shop}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
   backend:
     image: ${DOCKER_USERNAME}/basanti-shop-backend:latest
     restart: unless-stopped
     environment:
       NODE_ENV: production
       PORT: 8000
-      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-basanti_shop}
+      DATABASE_URL: ${DATABASE_URL}
       JWT_SECRET: ${JWT_SECRET}
       CORS_ORIGIN: ${CORS_ORIGIN}
       CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
@@ -37,9 +22,6 @@ services:
       - "8000:8000"
     volumes:
       - uploads_data:/app/uploads
-    depends_on:
-      postgres:
-        condition: service_healthy
 
   frontend:
     image: ${DOCKER_USERNAME}/basanti-shop-frontend:latest
@@ -50,5 +32,4 @@ services:
       - backend
 
 volumes:
-  postgres_data:
   uploads_data:
