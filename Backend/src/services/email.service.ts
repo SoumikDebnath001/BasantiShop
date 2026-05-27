@@ -6,7 +6,6 @@ const transporter = nodemailer.createTransport({
   port: env.SMTP_PORT,
   secure: env.SMTP_PORT === 465,
   auth: { user: env.SMTP_USER, pass: env.SMTP_PASS },
-  family: 4,
 })
 
 function buildOtpHtml(title: string, body: string, otp: string, expiryMinutes: number): string {
