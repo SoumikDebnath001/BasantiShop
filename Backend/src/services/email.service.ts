@@ -7,9 +7,9 @@ function createTransporter() {
     port: env.SMTP_PORT,
     secure: env.SMTP_PORT === 465,
     auth: { user: env.SMTP_USER, pass: env.SMTP_PASS },
-    connectionTimeout: 30_000,
-    greetingTimeout: 15_000,
-    socketTimeout: 30_000,
+    connectionTimeout: 60_000,
+    greetingTimeout: 60_000,
+    socketTimeout: 60_000,
   })
 }
 
