@@ -1,12 +1,17 @@
 import nodemailer from 'nodemailer'
 import { env, isProd } from '../config/env.js'
 
-const transporter = nodemailer.createTransport({
-  host: env.SMTP_HOST,
-  port: env.SMTP_PORT,
-  secure: env.SMTP_PORT === 465,
-  auth: { user: env.SMTP_USER, pass: env.SMTP_PASS },
-})
+function createTransporter() {
+  return nodemailer.createTransport({
+    host: env.SMTP_HOST,
+    port: env.SMTP_PORT,
+    secure: env.SMTP_PORT === 465,
+    auth: { user: env.SMTP_USER, pass: env.SMTP_PASS },
+    connectionTimeout: 30_000,
+    greetingTimeout: 15_000,
+    socketTimeout: 30_000,
+  })
+}
 
 function buildOtpHtml(title: string, body: string, otp: string, expiryMinutes: number): string {
   return `<!DOCTYPE html>
@@ -58,7 +63,7 @@ async function send(to: string, subject: string, html: string): Promise<void> {
     return
   }
   try {
-    await transporter.sendMail({ from: env.SMTP_FROM, to, subject, html })
+    await createTransporter().sendMail({ from: env.SMTP_FROM, to, subject, html })
     console.log(`[EMAIL] Sent to ${to} — "${subject}"`)
   } catch (err: any) {
     console.error(`[EMAIL ERROR] Failed to send to ${to}:`, err?.message ?? err)
