@@ -1,17 +1,5 @@
-import nodemailer from 'nodemailer'
-import { env, isProd } from '../config/env.js'
-
-function createTransporter() {
-  return nodemailer.createTransport({
-    host: env.SMTP_HOST,
-    port: env.SMTP_PORT,
-    secure: env.SMTP_PORT === 465,
-    auth: { user: env.SMTP_USER, pass: env.SMTP_PASS },
-    connectionTimeout: 30_000,
-    greetingTimeout: 15_000,
-    socketTimeout: 30_000,
-  })
-}
+import { Resend } from 'resend'
+import { env } from '../config/env.js'
 
 function buildOtpHtml(title: string, body: string, otp: string, expiryMinutes: number): string {
   return `<!DOCTYPE html>
@@ -44,33 +32,39 @@ function buildOtpHtml(title: string, body: string, otp: string, expiryMinutes: n
 </html>`
 }
 
-// Extract the 6-digit OTP from the HTML for console display
 function extractOtp(html: string): string {
   const m = html.match(/letter-spacing:14px[^>]*>(\d{6})</)
   return m?.[1] ?? '(see HTML)'
 }
 
 async function send(to: string, subject: string, html: string): Promise<void> {
-  if (!env.SMTP_USER || !env.SMTP_PASS) {
-    // SMTP not configured — print OTP to console so dev/testing works
+  if (!env.RESEND_API_KEY) {
     const otp = extractOtp(html)
     console.log(`\n${'─'.repeat(50)}`)
-    console.log(`[EMAIL - no SMTP configured]`)
+    console.log(`[EMAIL - no RESEND_API_KEY configured]`)
     console.log(`To      : ${to}`)
     console.log(`Subject : ${subject}`)
     console.log(`OTP CODE: ${otp}`)
     console.log(`${'─'.repeat(50)}\n`)
     return
   }
-  try {
-    await createTransporter().sendMail({ from: env.SMTP_FROM, to, subject, html })
-    console.log(`[EMAIL] Sent to ${to} — "${subject}"`)
-  } catch (err: any) {
-    console.error(`[EMAIL ERROR] Failed to send to ${to}:`, err?.message ?? err)
+
+  const resend = new Resend(env.RESEND_API_KEY)
+  const { error } = await resend.emails.send({
+    from: env.SMTP_FROM,
+    to,
+    subject,
+    html,
+  })
+
+  if (error) {
+    console.error(`[EMAIL ERROR] Failed to send to ${to}:`, error.message)
     const e = new Error('Failed to send email. Please try again later.')
     ;(e as any).status = 503
     throw e
   }
+
+  console.log(`[EMAIL] Sent to ${to} — "${subject}"`)
 }
 
 export const emailService = {

@@ -15,11 +15,8 @@ export const env = {
   CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
   CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
   CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
-  SMTP_HOST: process.env.SMTP_HOST ?? 'smtp.gmail.com',
-  SMTP_PORT: Number(process.env.SMTP_PORT ?? 587),
-  SMTP_USER: process.env.SMTP_USER ?? '',
-  SMTP_PASS: process.env.SMTP_PASS ?? '',
-  SMTP_FROM: process.env.SMTP_FROM ?? 'BasantiShop <noreply@basantishop.com>',
+  RESEND_API_KEY: process.env.RESEND_API_KEY ?? '',
+  SMTP_FROM: process.env.SMTP_FROM ?? 'BasantiShop <onboarding@resend.dev>',
   RAZORPAY_KEY_ID: process.env.RAZORPAY_KEY_ID ?? '',
   RAZORPAY_KEY_SECRET: process.env.RAZORPAY_KEY_SECRET ?? '',
 } as const
